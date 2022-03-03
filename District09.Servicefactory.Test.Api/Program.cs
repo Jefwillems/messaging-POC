@@ -11,6 +11,7 @@ builder.Host.UseDigipolisSerilog();
 builder.Services.AddMessaging(builder.Configuration,
     opts => opts
         .WithListener<MyData, MyMessageHandler>("some.queue.mydata")
+        .WithPreProcessor<MyFirstPreProcessor>()
         .WithPreProcessor<MyPreProcessor>()
         .WithPostProcessor<MyPostProcessor>()
         .WithPublisher<MyData>("some.queue.mydata")

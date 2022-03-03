@@ -14,6 +14,7 @@ public class MyMessageHandler : IMessageHandler<MyData>
 
     public HandlerResult HandleMessage(ReceivedMessage<MyData> message)
     {
+        _logger.LogInformation("handling message");
         return new HandlerResult()
         {
             Original = message,

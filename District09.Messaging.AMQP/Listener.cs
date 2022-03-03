@@ -2,6 +2,7 @@ using System.Text.Json;
 using Apache.NMS;
 using District09.Messaging.AMQP.Contracts;
 using District09.Messaging.AMQP.Processors;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace District09.Messaging.AMQP;
@@ -10,9 +11,7 @@ public class Listener<TDataType> : IListener<TDataType>, IDisposable
 {
     private readonly ILogger<Listener<TDataType>> _logger;
     private readonly IAmqWrapper _wrapper;
-    private readonly IMessageHandler<TDataType> _messageHandler;
-    private readonly IEnumerable<BasePreProcessor> _preProcessors;
-    private readonly IEnumerable<BasePostProcessor> _postProcessors;
+    private readonly IServiceProvider _serviceProvider;
     private ISession? _session;
     private IMessageConsumer? _consumer;
 
@@ -20,15 +19,11 @@ public class Listener<TDataType> : IListener<TDataType>, IDisposable
     public Listener(
         ILogger<Listener<TDataType>> logger,
         IAmqWrapper wrapper,
-        IMessageHandler<TDataType> handler,
-        IEnumerable<BasePreProcessor> preProcessors,
-        IEnumerable<BasePostProcessor> postProcessors)
+        IServiceProvider serviceProvider)
     {
         _logger = logger;
         _wrapper = wrapper;
-        _messageHandler = handler;
-        _preProcessors = preProcessors;
-        _postProcessors = postProcessors;
+        _serviceProvider = serviceProvider;
     }
 
     public Task StartListener(string queueName)
@@ -42,20 +37,25 @@ public class Listener<TDataType> : IListener<TDataType>, IDisposable
 
     private void MessageReceivedListener(IMessage message)
     {
-        _logger.LogInformation("Received message: {@Message}", message);
+        using var scope = _serviceProvider.CreateScope();
+
         if (message is not ITextMessage textMessage) return;
         var content = JsonSerializer.Deserialize<TDataType>(textMessage.Text);
         if (content == null) return;
 
         // Pre process with possible plugins (Apm, tracing, logging, etc)
-        var preQueue = new ProcessorQueue<ITextMessage>(_preProcessors);
+        var preProcessors = scope.ServiceProvider.GetServices<BasePreProcessor>();
+        var preQueue = new ProcessorQueue<ITextMessage>(preProcessors);
         var preProcessedMessage = preQueue.Execute(textMessage);
 
+        var handler = scope.ServiceProvider.GetService<IMessageHandler<TDataType>>() ??
+                      throw new Exception($"Message hanndler for type {typeof(TDataType)} is not registered");
         var msg = new ReceivedMessage<TDataType>(preProcessedMessage, content);
-        var result = _messageHandler.HandleMessage(msg);
+        var result = handler.HandleMessage(msg);
 
         // Post process (no use case yet but might be useful later on)
-        var postQueue = new ProcessorQueue<HandlerResult>(_postProcessors);
+        var postProcessors = scope.ServiceProvider.GetServices<BasePostProcessor>();
+        var postQueue = new ProcessorQueue<HandlerResult>(postProcessors);
         var postProcessed = postQueue.Execute(result);
         // TODO finalize?
         message.Acknowledge();

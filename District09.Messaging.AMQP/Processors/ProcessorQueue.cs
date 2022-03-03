@@ -1,8 +1,8 @@
 namespace District09.Messaging.AMQP.Processors;
 
-public class ProcessorQueue<TProcessor>
+internal class ProcessorQueue<TProcessor>
 {
-    private ProcessorNode<TProcessor>? First { get; set; }
+    private ProcessorNode<TProcessor>? First { get; }
 
     public ProcessorQueue(IEnumerable<IProcessor<TProcessor>> processors)
     {

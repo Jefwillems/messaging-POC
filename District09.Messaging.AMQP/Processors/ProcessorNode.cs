@@ -1,8 +1,8 @@
 namespace District09.Messaging.AMQP.Processors;
 
-public class ProcessorNode<TNodeType>
+internal class ProcessorNode<TNodeType>
 {
-    private ProcessorNode<TNodeType>? Next { get; set; }
+    private ProcessorNode<TNodeType>? Next { get; }
     private readonly IProcessor<TNodeType> _currentProcessor;
 
     public ProcessorNode(IEnumerable<IProcessor<TNodeType>> nextNodes)

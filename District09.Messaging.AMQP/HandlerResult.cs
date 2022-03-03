@@ -1,5 +1,3 @@
-using Apache.NMS;
-
 namespace District09.Messaging.AMQP;
 
 public class HandlerResult

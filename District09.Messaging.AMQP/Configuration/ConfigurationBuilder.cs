@@ -26,7 +26,7 @@ public class ConfigurationBuilder : IConfigBuilder
     public IRegisterConfig WithListener<TDataType, THandlerType>(string queue)
     {
         var handlerType = typeof(IMessageHandler<TDataType>);
-        _services.AddSingleton(handlerType, typeof(THandlerType));
+        _services.AddScoped(handlerType, typeof(THandlerType));
         _services.AddSingleton<IListener<TDataType>, Listener<TDataType>>();
 
         _services.AddSingleton<IHostedService>(provider => new ListenerHostedService<TDataType>(
