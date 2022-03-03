@@ -12,8 +12,12 @@ public class MyMessageHandler : IMessageHandler<MyData>
         _logger = logger;
     }
 
-    public void HandleMessage(ReceivedMessage<MyData> message)
+    public HandlerResult HandleMessage(ReceivedMessage<MyData> message)
     {
-        _logger.LogInformation("Message: {Message}", message.Data.Test);
+        return new HandlerResult()
+        {
+            Original = message,
+            Exception = new Exception("some error occured")
+        };
     }
 }

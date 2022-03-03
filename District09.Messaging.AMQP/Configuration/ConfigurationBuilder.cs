@@ -26,8 +26,8 @@ public class ConfigurationBuilder : IConfigBuilder
     public IRegisterConfig WithListener<TDataType, THandlerType>(string queue)
     {
         var handlerType = typeof(IMessageHandler<TDataType>);
-        _services.AddScoped(handlerType, typeof(THandlerType));
-        _services.AddScoped<IListener<TDataType>, Listener<TDataType>>();
+        _services.AddSingleton(handlerType, typeof(THandlerType));
+        _services.AddSingleton<IListener<TDataType>, Listener<TDataType>>();
 
         _services.AddSingleton<IHostedService>(provider => new ListenerHostedService<TDataType>(
             provider.GetRequiredService<ILogger<ListenerHostedService<TDataType>>>(),
@@ -47,15 +47,15 @@ public class ConfigurationBuilder : IConfigBuilder
         return this;
     }
 
-    public IRegisterConfig WithPreProcessor<TProcessorType>() where TProcessorType : IPreProcessor
+    public IRegisterConfig WithPreProcessor<TProcessorType>() where TProcessorType : BasePreProcessor
     {
-        _services.AddScoped(typeof(IPreProcessor), typeof(TProcessorType));
+        _services.AddScoped(typeof(BasePreProcessor), typeof(TProcessorType));
         return this;
     }
 
-    public IRegisterConfig WithPostProcessor<TProcessorType>() where TProcessorType : IPostProcessor
+    public IRegisterConfig WithPostProcessor<TProcessorType>() where TProcessorType : BasePostProcessor
     {
-        _services.AddScoped(typeof(IPostProcessor), typeof(TProcessorType));
+        _services.AddScoped(typeof(BasePostProcessor), typeof(TProcessorType));
         return this;
     }
 

@@ -6,7 +6,7 @@ public interface IRegisterConfig
 {
     IRegisterConfig WithListener<TDataType, THandlerType>(string queue);
     IRegisterConfig WithPublisher<TDataType>(string queue);
-    IRegisterConfig WithPreProcessor<TProcessorType>() where TProcessorType : IPreProcessor;
-    IRegisterConfig WithPostProcessor<TProcessorType>() where TProcessorType : IPostProcessor;
+    IRegisterConfig WithPreProcessor<TProcessorType>() where TProcessorType : BasePreProcessor;
+    IRegisterConfig WithPostProcessor<TProcessorType>() where TProcessorType : BasePostProcessor;
     IFinishedConfig Build();
 }

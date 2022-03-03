@@ -11,8 +11,8 @@ public class Listener<TDataType> : IListener<TDataType>, IDisposable
     private readonly ILogger<Listener<TDataType>> _logger;
     private readonly IAmqWrapper _wrapper;
     private readonly IMessageHandler<TDataType> _messageHandler;
-    private readonly IEnumerable<IPreProcessor> _preProcessors;
-    private readonly IEnumerable<IPostProcessor> _postProcessors;
+    private readonly IEnumerable<BasePreProcessor> _preProcessors;
+    private readonly IEnumerable<BasePostProcessor> _postProcessors;
     private ISession? _session;
     private IMessageConsumer? _consumer;
 
@@ -21,8 +21,8 @@ public class Listener<TDataType> : IListener<TDataType>, IDisposable
         ILogger<Listener<TDataType>> logger,
         IAmqWrapper wrapper,
         IMessageHandler<TDataType> handler,
-        IEnumerable<IPreProcessor> preProcessors,
-        IEnumerable<IPostProcessor> postProcessors)
+        IEnumerable<BasePreProcessor> preProcessors,
+        IEnumerable<BasePostProcessor> postProcessors)
     {
         _logger = logger;
         _wrapper = wrapper;
@@ -47,18 +47,18 @@ public class Listener<TDataType> : IListener<TDataType>, IDisposable
         var content = JsonSerializer.Deserialize<TDataType>(textMessage.Text);
         if (content == null) return;
 
-        foreach (var processor in _preProcessors)
-        {
-            processor.PreProcess(textMessage);
-        }
+        // Pre process with possible plugins (Apm, tracing, logging, etc)
+        var preQueue = new ProcessorQueue<ITextMessage>(_preProcessors);
+        var preProcessedMessage = preQueue.Execute(textMessage);
 
-        var msg = new ReceivedMessage<TDataType>(textMessage, content);
-        _messageHandler.HandleMessage(msg);
+        var msg = new ReceivedMessage<TDataType>(preProcessedMessage, content);
+        var result = _messageHandler.HandleMessage(msg);
 
-        foreach (var processor in _postProcessors)
-        {
-            processor.PostProcess(msg, null);
-        }
+        // Post process (no use case yet but might be useful later on)
+        var postQueue = new ProcessorQueue<HandlerResult>(_postProcessors);
+        var postProcessed = postQueue.Execute(result);
+        // TODO finalize?
+        message.Acknowledge();
     }
 
     public Task StopListener()
