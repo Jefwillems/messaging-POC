@@ -21,9 +21,4 @@ public static class MessagingExtensions
 
         return services;
     }
-
-    private static T CastObject<T>(object input)
-    {
-        return (T)input;
-    }
 }

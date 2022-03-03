@@ -1,4 +1,5 @@
 using District09.Messaging.AMQP.Contracts;
+using District09.Messaging.AMQP.Processors;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace District09.Messaging.AMQP.Configuration;
 
-public class ConfigurationBuilder : IConfigBuilder, IRegisterConfig
+public class ConfigurationBuilder : IConfigBuilder
 {
     private readonly IServiceCollection _services;
     private readonly IDictionary<Type, string> _listeners;
@@ -45,6 +46,19 @@ public class ConfigurationBuilder : IConfigBuilder, IRegisterConfig
         _publishers.Add(publisherType, queue);
         return this;
     }
+
+    public IRegisterConfig WithPreProcessor<TProcessorType>() where TProcessorType : IPreProcessor
+    {
+        _services.AddScoped(typeof(IPreProcessor), typeof(TProcessorType));
+        return this;
+    }
+
+    public IRegisterConfig WithPostProcessor<TProcessorType>() where TProcessorType : IPostProcessor
+    {
+        _services.AddScoped(typeof(IPostProcessor), typeof(TProcessorType));
+        return this;
+    }
+
 
     public IFinishedConfig Build()
     {

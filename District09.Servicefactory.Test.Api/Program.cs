@@ -1,4 +1,5 @@
 using District09.Messaging.AMQP.Extensions;
+using District09.Messaging.Extensions.Apm.Extensions;
 using District09.Servicefactory.Test.Api;
 using District09.Servicefactory.Test.Api.Handlers;
 
@@ -11,6 +12,7 @@ builder.Services.AddTransient<IDoSomething<DoSomethingB>, DoSomethingB>();
 builder.Services.AddMessaging(builder.Configuration,
     opts => opts
         .WithListener<MyData, MyMessageHandler>("some.queue.mydata")
+        .WithElasticApm()
         .Build());
 
 var app = builder.Build();

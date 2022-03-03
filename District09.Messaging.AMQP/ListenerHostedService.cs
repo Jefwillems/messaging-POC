@@ -10,7 +10,8 @@ internal class ListenerHostedService<TDataType> : BackgroundService
     private readonly IListener<TDataType> _listener;
     private readonly string _queueName;
 
-    public ListenerHostedService(ILogger<ListenerHostedService<TDataType>> logger,
+    public ListenerHostedService(
+        ILogger<ListenerHostedService<TDataType>> logger,
         IListener<TDataType> listener,
         string queueName)
     {

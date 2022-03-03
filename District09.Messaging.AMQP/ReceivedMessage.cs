@@ -2,7 +2,11 @@ using Apache.NMS;
 
 namespace District09.Messaging.AMQP;
 
-public class ReceivedMessage<TDataType>
+public class ReceivedMessage
+{
+}
+
+public class ReceivedMessage<TDataType> : ReceivedMessage
 {
     private ITextMessage _original;
     public TDataType Data { get; }

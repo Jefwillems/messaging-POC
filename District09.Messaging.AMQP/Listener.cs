@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Apache.NMS;
 using District09.Messaging.AMQP.Contracts;
+using District09.Messaging.AMQP.Processors;
 using Microsoft.Extensions.Logging;
 
 namespace District09.Messaging.AMQP;
@@ -10,6 +11,8 @@ public class Listener<TDataType> : IListener<TDataType>, IDisposable
     private readonly ILogger<Listener<TDataType>> _logger;
     private readonly IAmqWrapper _wrapper;
     private readonly IMessageHandler<TDataType> _messageHandler;
+    private readonly IEnumerable<IPreProcessor> _preProcessors;
+    private readonly IEnumerable<IPostProcessor> _postProcessors;
     private ISession? _session;
     private IMessageConsumer? _consumer;
 
@@ -17,11 +20,15 @@ public class Listener<TDataType> : IListener<TDataType>, IDisposable
     public Listener(
         ILogger<Listener<TDataType>> logger,
         IAmqWrapper wrapper,
-        IMessageHandler<TDataType> handler)
+        IMessageHandler<TDataType> handler,
+        IEnumerable<IPreProcessor> preProcessors,
+        IEnumerable<IPostProcessor> postProcessors)
     {
         _logger = logger;
         _wrapper = wrapper;
         _messageHandler = handler;
+        _preProcessors = preProcessors;
+        _postProcessors = postProcessors;
     }
 
     public Task StartListener(string queueName)
@@ -38,10 +45,19 @@ public class Listener<TDataType> : IListener<TDataType>, IDisposable
         _logger.LogInformation("Received message: {@Message}", message);
         if (message is not ITextMessage textMessage) return;
         var content = JsonSerializer.Deserialize<TDataType>(textMessage.Text);
-        if (content != null)
+        if (content == null) return;
+
+        foreach (var processor in _preProcessors)
         {
-            _messageHandler.HandleMessage(new ReceivedMessage<TDataType>(textMessage, content));
-            // TODO: tracing, correlation etc
+            processor.PreProcess(textMessage);
+        }
+
+        var msg = new ReceivedMessage<TDataType>(textMessage, content);
+        _messageHandler.HandleMessage(msg);
+
+        foreach (var processor in _postProcessors)
+        {
+            processor.PostProcess(msg, null);
         }
     }
 
