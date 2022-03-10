@@ -9,8 +9,11 @@ public interface IRegisterConfig
 
     IRegisterConfig WithPublisher<TDataType>(string queue);
 
-    IRegisterConfig WithMiddleware<TMessageMiddleware, TForDataType>()
-        where TMessageMiddleware : IMessageMiddleware<TForDataType>;
+    IRegisterConfig WithListenerMiddleware<TMessageMiddleware, TForDataType>()
+        where TMessageMiddleware : IListenerMiddleware<TForDataType>;
+
+    IRegisterConfig WithPublisherMiddleware<TMiddleware, TDataType>()
+        where TMiddleware : IPublisherMiddleware<TDataType>;
 
     IFinishedConfig Build();
 }

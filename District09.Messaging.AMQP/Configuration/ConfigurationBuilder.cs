@@ -26,7 +26,7 @@ public class ConfigurationBuilder : IConfigBuilder
     public IRegisterConfig WithListener<TDataType, THandlerType>(string queue)
         where THandlerType : BaseMessageHandler<TDataType>
     {
-        var handlerType = typeof(IMessageMiddleware<TDataType>);
+        var handlerType = typeof(IListenerMiddleware<TDataType>);
         _services.AddScoped(handlerType, typeof(THandlerType));
         _services.AddSingleton<IListener<TDataType>, Listener<TDataType>>();
 
@@ -48,14 +48,21 @@ public class ConfigurationBuilder : IConfigBuilder
         return this;
     }
 
-    public IRegisterConfig WithMiddleware<TMessageMiddleware, TForDataType>()
-        where TMessageMiddleware : IMessageMiddleware<TForDataType>
+    public IRegisterConfig WithListenerMiddleware<TMessageMiddleware, TForDataType>()
+        where TMessageMiddleware : IListenerMiddleware<TForDataType>
     {
-        var middlewareType = typeof(IMessageMiddleware<TForDataType>);
+        var middlewareType = typeof(IListenerMiddleware<TForDataType>);
         _services.AddScoped(middlewareType, typeof(TMessageMiddleware));
         return this;
     }
 
+    public IRegisterConfig WithPublisherMiddleware<TMiddleware, TDataType>()
+        where TMiddleware : IPublisherMiddleware<TDataType>
+    {
+        var mType = typeof(IPublisherMiddleware<TDataType>);
+        _services.AddScoped(mType, typeof(TMiddleware));
+        return this;
+    }
 
     public IFinishedConfig Build()
     {

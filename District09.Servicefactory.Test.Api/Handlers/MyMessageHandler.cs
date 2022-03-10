@@ -14,6 +14,8 @@ public class MyMessageHandler : BaseMessageHandler<MyData>
 
     protected override void HandleMessage(MiddlewareContext<MyData> message)
     {
+        message.Extra.TryGetValue("CorrelationId", out var corrId);
+        _logger.LogInformation("CorrelationId was: {CorrId}", corrId);
         _logger.LogInformation("doing stuff in my message handler");
         _logger.LogInformation("message content was: {Content}", message.Original.Text);
     }

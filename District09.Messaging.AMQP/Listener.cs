@@ -7,76 +7,34 @@ using Microsoft.Extensions.Logging;
 
 namespace District09.Messaging.AMQP;
 
-public class Listener<TDataType> : IListener<TDataType>, IDisposable
+public class Listener<TDataType> : BaseListener<TDataType>
 {
-    private readonly ILogger<Listener<TDataType>> _logger;
-    private readonly IAmqWrapper _wrapper;
-    private readonly IServiceProvider _serviceProvider;
-    private ISession? _session;
-    private IMessageConsumer? _consumer;
-
-
-    public Listener(
-        ILogger<Listener<TDataType>> logger,
+    public Listener(ILogger<Listener<TDataType>> logger,
         IAmqWrapper wrapper,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider) :
+        base(logger, wrapper, serviceProvider)
     {
-        _logger = logger;
-        _wrapper = wrapper;
-        _serviceProvider = serviceProvider;
     }
 
-    public Task StartListener(string queueName)
+    protected override void HandleMessage(ITextMessage message, IServiceScope scope)
     {
-        _session = _wrapper.GetSession();
-        var queue = _session.GetQueue(queueName);
-        _consumer = _session.CreateConsumer(queue);
-        _consumer.Listener += MessageReceivedListener;
-        return Task.CompletedTask;
-    }
-
-    private void MessageReceivedListener(IMessage message)
-    {
-        using var scope = _serviceProvider.CreateScope();
-
-        if (message is not ITextMessage textMessage) return;
-        var content = JsonSerializer.Deserialize<TDataType>(textMessage.Text);
+        var content = JsonSerializer.Deserialize<TDataType>(message.Text);
         if (content == null) return;
 
-
-        var pipelineMiddleware = scope.ServiceProvider.GetServices<IMessageMiddleware<TDataType>>();
+        var pipelineMiddleware = scope.ServiceProvider.GetServices<IListenerMiddleware<TDataType>>();
         var pipeline = new MessagePipeline<TDataType>(pipelineMiddleware);
-        var context = new MiddlewareContext<TDataType>(textMessage);
+        var context = new MiddlewareContext<TDataType>(message);
+
         var result = pipeline.Run(context);
         if (result.IsFailed())
         {
-            _logger.LogWarning(result.Exception, "Message processing failed");
+            Logger.LogWarning(result.Exception, "Message processing failed");
         }
         else
         {
-            _logger.LogInformation("Message processed successfully");
+            Logger.LogInformation("Message processed successfully");
         }
 
         message.Acknowledge();
-    }
-
-    public Task StopListener()
-    {
-        _session?.Close();
-        _consumer?.Close();
-        return Task.CompletedTask;
-    }
-
-    private void Dispose(bool disposing)
-    {
-        if (!disposing) return;
-        _session?.Dispose();
-        _consumer?.Dispose();
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
     }
 }

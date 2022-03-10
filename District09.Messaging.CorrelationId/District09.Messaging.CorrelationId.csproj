@@ -1,20 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\District09.Messaging.AMQP\District09.Messaging.AMQP.csproj" />
-      <ProjectReference Include="..\District09.Messaging.CorrelationId\District09.Messaging.CorrelationId.csproj" />
-      <ProjectReference Include="..\District09.Messaging.Extensions.Apm\District09.Messaging.Extensions.Apm.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Digipolis.Serilog.Elk.Configuration" Version="3.0.0" />
-      <PackageReference Include="Digipolis.Serilog.Elk.ConsoleSink" Version="3.0.0" />
     </ItemGroup>
 
 </Project>

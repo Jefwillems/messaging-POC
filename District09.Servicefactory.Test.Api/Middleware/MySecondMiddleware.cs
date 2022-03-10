@@ -3,7 +3,7 @@ using District09.Servicefactory.Test.Api.Handlers;
 
 namespace District09.Servicefactory.Test.Api.Middleware;
 
-public class MySecondMiddleware : IMessageMiddleware<MySecondData>
+public class MySecondMiddleware : IListenerMiddleware<MySecondData>
 {
     private readonly ILogger<MySecondMiddleware> _logger;
 

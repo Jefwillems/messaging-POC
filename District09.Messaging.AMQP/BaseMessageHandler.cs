@@ -2,7 +2,7 @@ using District09.Messaging.AMQP.Pipeline;
 
 namespace District09.Messaging.AMQP;
 
-public abstract class BaseMessageHandler<TDataType> : IMessageMiddleware<TDataType>
+public abstract class BaseMessageHandler<TDataType> : IListenerMiddleware<TDataType>
 {
     protected abstract void HandleMessage(MiddlewareContext<TDataType> context);
 
