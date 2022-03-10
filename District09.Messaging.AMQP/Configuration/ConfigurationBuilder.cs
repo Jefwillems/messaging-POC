@@ -1,5 +1,5 @@
 using District09.Messaging.AMQP.Contracts;
-using District09.Messaging.AMQP.Processors;
+using District09.Messaging.AMQP.Pipeline;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,8 +24,9 @@ public class ConfigurationBuilder : IConfigBuilder
     }
 
     public IRegisterConfig WithListener<TDataType, THandlerType>(string queue)
+        where THandlerType : BaseMessageHandler<TDataType>
     {
-        var handlerType = typeof(IMessageHandler<TDataType>);
+        var handlerType = typeof(IMessageMiddleware<TDataType>);
         _services.AddScoped(handlerType, typeof(THandlerType));
         _services.AddSingleton<IListener<TDataType>, Listener<TDataType>>();
 
@@ -47,21 +48,19 @@ public class ConfigurationBuilder : IConfigBuilder
         return this;
     }
 
-    public IRegisterConfig WithPreProcessor<TProcessorType>() where TProcessorType : BasePreProcessor
+    public IRegisterConfig WithMiddleware<TMessageMiddleware, TForDataType>()
+        where TMessageMiddleware : IMessageMiddleware<TForDataType>
     {
-        _services.AddScoped(typeof(BasePreProcessor), typeof(TProcessorType));
-        return this;
-    }
-
-    public IRegisterConfig WithPostProcessor<TProcessorType>() where TProcessorType : BasePostProcessor
-    {
-        _services.AddScoped(typeof(BasePostProcessor), typeof(TProcessorType));
+        var middlewareType = typeof(IMessageMiddleware<TForDataType>);
+        _services.AddScoped(middlewareType, typeof(TMessageMiddleware));
         return this;
     }
 
 
     public IFinishedConfig Build()
     {
-        return new MessagingConfiguration(_listeners, _publishers, _options);
+        var config = new MessagingConfiguration(_listeners, _publishers, _options);
+        _services.AddSingleton(config);
+        return config;
     }
 }

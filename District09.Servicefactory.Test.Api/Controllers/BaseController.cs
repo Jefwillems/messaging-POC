@@ -9,17 +9,29 @@ namespace District09.Servicefactory.Test.Api.Controllers;
 public class BaseController : ControllerBase
 {
     private readonly IMessagePublisher<MyData> _publisher;
+    private readonly IMessagePublisher<MySecondData> _secondPublisher;
 
-    public BaseController(IMessagePublisher<MyData> publisher)
+    public BaseController(IMessagePublisher<MyData> publisher,
+        IMessagePublisher<MySecondData> secondPublisher)
     {
         _publisher = publisher;
+        _secondPublisher = secondPublisher;
     }
 
     [HttpGet]
-    public IActionResult Index()
+    public IActionResult Index(int i = 1)
     {
-        var a = new MyData() { Hello = "World" };
-        _publisher.PublishMessage(a);
-        return Ok(a);
+        if (i != 1)
+        {
+            var a = new MySecondData() { Test = "test123" };
+            _secondPublisher.PublishMessage(a);
+            return Ok(a);
+        }
+        else
+        {
+            var a = new MyData() { Hello = "World" };
+            _publisher.PublishMessage(a);
+            return Ok(a);
+        }
     }
 }

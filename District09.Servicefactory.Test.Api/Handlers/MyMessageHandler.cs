@@ -1,9 +1,9 @@
 using District09.Messaging.AMQP;
-using District09.Messaging.AMQP.Contracts;
+using District09.Messaging.AMQP.Pipeline;
 
 namespace District09.Servicefactory.Test.Api.Handlers;
 
-public class MyMessageHandler : IMessageHandler<MyData>
+public class MyMessageHandler : BaseMessageHandler<MyData>
 {
     private readonly ILogger<MyMessageHandler> _logger;
 
@@ -12,13 +12,9 @@ public class MyMessageHandler : IMessageHandler<MyData>
         _logger = logger;
     }
 
-    public HandlerResult HandleMessage(ReceivedMessage<MyData> message)
+    protected override void HandleMessage(MiddlewareContext<MyData> message)
     {
-        _logger.LogInformation("handling message");
-        return new HandlerResult()
-        {
-            Original = message,
-            Exception = new Exception("some error occured")
-        };
+        _logger.LogInformation("doing stuff in my message handler");
+        _logger.LogInformation("message content was: {Content}", message.Original.Text);
     }
 }

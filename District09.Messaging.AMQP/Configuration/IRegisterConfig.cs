@@ -1,12 +1,16 @@
-using District09.Messaging.AMQP.Processors;
+using District09.Messaging.AMQP.Pipeline;
 
 namespace District09.Messaging.AMQP.Configuration;
 
 public interface IRegisterConfig
 {
-    IRegisterConfig WithListener<TDataType, THandlerType>(string queue);
+    IRegisterConfig WithListener<TDataType, THandlerType>(string queue)
+        where THandlerType : BaseMessageHandler<TDataType>;
+
     IRegisterConfig WithPublisher<TDataType>(string queue);
-    IRegisterConfig WithPreProcessor<TProcessorType>() where TProcessorType : BasePreProcessor;
-    IRegisterConfig WithPostProcessor<TProcessorType>() where TProcessorType : BasePostProcessor;
+
+    IRegisterConfig WithMiddleware<TMessageMiddleware, TForDataType>()
+        where TMessageMiddleware : IMessageMiddleware<TForDataType>;
+
     IFinishedConfig Build();
 }

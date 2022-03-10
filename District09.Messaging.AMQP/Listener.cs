@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Apache.NMS;
 using District09.Messaging.AMQP.Contracts;
-using District09.Messaging.AMQP.Processors;
+using District09.Messaging.AMQP.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -43,21 +43,20 @@ public class Listener<TDataType> : IListener<TDataType>, IDisposable
         var content = JsonSerializer.Deserialize<TDataType>(textMessage.Text);
         if (content == null) return;
 
-        // Pre process with possible plugins (Apm, tracing, logging, etc)
-        var preProcessors = scope.ServiceProvider.GetServices<BasePreProcessor>();
-        var preQueue = new ProcessorQueue<ITextMessage>(preProcessors);
-        var preProcessedMessage = preQueue.Execute(textMessage);
 
-        var handler = scope.ServiceProvider.GetService<IMessageHandler<TDataType>>() ??
-                      throw new Exception($"Message hanndler for type {typeof(TDataType)} is not registered");
-        var msg = new ReceivedMessage<TDataType>(preProcessedMessage, content);
-        var result = handler.HandleMessage(msg);
+        var pipelineMiddleware = scope.ServiceProvider.GetServices<IMessageMiddleware<TDataType>>();
+        var pipeline = new MessagePipeline<TDataType>(pipelineMiddleware);
+        var context = new MiddlewareContext<TDataType>(textMessage);
+        var result = pipeline.Run(context);
+        if (result.IsFailed())
+        {
+            _logger.LogWarning(result.Exception, "Message processing failed");
+        }
+        else
+        {
+            _logger.LogInformation("Message processed successfully");
+        }
 
-        // Post process (no use case yet but might be useful later on)
-        var postProcessors = scope.ServiceProvider.GetServices<BasePostProcessor>();
-        var postQueue = new ProcessorQueue<HandlerResult>(postProcessors);
-        var postProcessed = postQueue.Execute(result);
-        // TODO finalize?
         message.Acknowledge();
     }
 

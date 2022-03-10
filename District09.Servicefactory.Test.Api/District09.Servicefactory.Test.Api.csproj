@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\District09.Messaging.AMQP\District09.Messaging.AMQP.csproj" />
+      <ProjectReference Include="..\District09.Messaging.Extensions.Apm\District09.Messaging.Extensions.Apm.csproj" />
     </ItemGroup>
 
     <ItemGroup>
