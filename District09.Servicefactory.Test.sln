@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "District09.Servicefactory.Test.Api", "District09.Servicefactory.Test.Api\District09.Servicefactory.Test.Api.csproj", "{F360D47D-2FC4-4F76-A0CA-750C96DABA05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "District09.Messaging.AMQP", "District09.Messaging.AMQP\District09.Messaging.AMQP.csproj", "{168603E5-3E36-4DCF-85EF-AEDD565DEE83}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "District09.Messaging", "District09.Messaging\District09.Messaging.csproj", "{168603E5-3E36-4DCF-85EF-AEDD565DEE83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "District09.Messaging.CorrelationId", "District09.Messaging.CorrelationId\District09.Messaging.CorrelationId.csproj", "{1FF6B571-EB85-4BD1-973B-EA120FEF887B}"
 EndProject

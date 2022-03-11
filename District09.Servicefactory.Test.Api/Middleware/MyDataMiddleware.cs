@@ -1,4 +1,4 @@
-using District09.Messaging.AMQP.Pipeline;
+using District09.Messaging.Pipeline;
 using District09.Servicefactory.Test.Api.Handlers;
 
 namespace District09.Servicefactory.Test.Api.Middleware;

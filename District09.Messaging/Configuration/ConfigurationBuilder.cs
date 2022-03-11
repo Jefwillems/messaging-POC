@@ -1,11 +1,11 @@
-using District09.Messaging.AMQP.Contracts;
-using District09.Messaging.AMQP.Pipeline;
+using District09.Messaging.Contracts;
+using District09.Messaging.Pipeline;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace District09.Messaging.AMQP.Configuration;
+namespace District09.Messaging.Configuration;
 
 public class ConfigurationBuilder : IConfigBuilder
 {

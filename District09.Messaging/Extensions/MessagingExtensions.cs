@@ -1,10 +1,10 @@
-using District09.Messaging.AMQP;
-using District09.Messaging.AMQP.Configuration;
-using District09.Messaging.AMQP.Contracts;
+using District09.Messaging;
+using District09.Messaging.Configuration;
+using District09.Messaging.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace District09.Messaging.AMQP.Extensions;
+namespace District09.Messaging.Extensions;
 
 public static class MessagingExtensions
 {

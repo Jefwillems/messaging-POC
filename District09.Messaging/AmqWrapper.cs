@@ -1,10 +1,10 @@
 using Apache.NMS;
 using Apache.NMS.AMQP;
-using District09.Messaging.AMQP.Configuration;
-using District09.Messaging.AMQP.Contracts;
+using District09.Messaging.Configuration;
+using District09.Messaging.Contracts;
 using Microsoft.Extensions.Logging;
 
-namespace District09.Messaging.AMQP;
+namespace District09.Messaging;
 
 public sealed class AmqWrapper : IAmqWrapper, IDisposable
 {

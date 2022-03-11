@@ -1,6 +1,6 @@
 using Apache.NMS;
 
-namespace District09.Messaging.AMQP.Contracts;
+namespace District09.Messaging.Contracts;
 
 public interface IAmqWrapper
 {

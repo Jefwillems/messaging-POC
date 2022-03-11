@@ -1,4 +1,4 @@
-using District09.Messaging.AMQP.Configuration;
+using District09.Messaging.Configuration;
 using District09.Messaging.CorrelationId.Middleware;
 
 namespace District09.Messaging.CorrelationId.Extensions;

@@ -1,5 +1,5 @@
-using District09.Messaging.AMQP;
-using District09.Messaging.AMQP.Pipeline;
+using District09.Messaging;
+using District09.Messaging.Pipeline;
 
 namespace District09.Servicefactory.Test.Api.Handlers;
 

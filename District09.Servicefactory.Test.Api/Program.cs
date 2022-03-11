@@ -1,7 +1,7 @@
 using CorrelationId;
 using CorrelationId.DependencyInjection;
 using Digipolis.Serilog.Elk.Configuration;
-using District09.Messaging.AMQP.Extensions;
+using District09.Messaging.Extensions;
 using District09.Messaging.CorrelationId.Extensions;
 using District09.Servicefactory.Test.Api.Handlers;
 using District09.Servicefactory.Test.Api.Middleware;

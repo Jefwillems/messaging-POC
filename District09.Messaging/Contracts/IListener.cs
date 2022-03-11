@@ -1,4 +1,4 @@
-namespace District09.Messaging.AMQP.Contracts;
+namespace District09.Messaging.Contracts;
 
 internal interface IListener<TDataType>
 {

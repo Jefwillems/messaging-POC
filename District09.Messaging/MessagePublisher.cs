@@ -1,11 +1,11 @@
 using System.Text.Json;
-using District09.Messaging.AMQP.Configuration;
-using District09.Messaging.AMQP.Contracts;
-using District09.Messaging.AMQP.Pipeline;
+using District09.Messaging.Configuration;
+using District09.Messaging.Contracts;
+using District09.Messaging.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace District09.Messaging.AMQP;
+namespace District09.Messaging;
 
 public class MessagePublisher<TDataType> : IMessagePublisher<TDataType>
 {

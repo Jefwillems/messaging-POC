@@ -2,7 +2,7 @@ using Apache.NMS;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace District09.Messaging.AMQP.Contracts;
+namespace District09.Messaging.Contracts;
 
 public abstract class BaseListener<TDataType> : IListener<TDataType>, IDisposable
 {

@@ -1,4 +1,4 @@
-using District09.Messaging.AMQP.Pipeline;
+using District09.Messaging.Pipeline;
 using Serilog.Context;
 
 namespace District09.Messaging.CorrelationId.Middleware;

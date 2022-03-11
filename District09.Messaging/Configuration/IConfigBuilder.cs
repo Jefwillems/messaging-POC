@@ -1,4 +1,4 @@
-namespace District09.Messaging.AMQP.Configuration;
+namespace District09.Messaging.Configuration;
 
 public interface IConfigBuilder : IRegisterConfig
 {

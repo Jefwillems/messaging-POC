@@ -1,4 +1,4 @@
-namespace District09.Messaging.AMQP.Pipeline;
+namespace District09.Messaging.Pipeline;
 
 internal class MessagePipeline<TDataType>
 {

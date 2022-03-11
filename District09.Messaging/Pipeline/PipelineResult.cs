@@ -1,6 +1,6 @@
 using Apache.NMS;
 
-namespace District09.Messaging.AMQP.Pipeline;
+namespace District09.Messaging.Pipeline;
 
 public class PipelineResult<TDataType>
 {

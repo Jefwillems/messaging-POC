@@ -1,6 +1,6 @@
-using District09.Messaging.AMQP.Pipeline;
+using District09.Messaging.Pipeline;
 
-namespace District09.Messaging.AMQP.Configuration;
+namespace District09.Messaging.Configuration;
 
 public interface IRegisterConfig
 {

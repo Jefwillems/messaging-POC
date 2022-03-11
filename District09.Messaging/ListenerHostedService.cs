@@ -1,8 +1,8 @@
-using District09.Messaging.AMQP.Contracts;
+using District09.Messaging.Contracts;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace District09.Messaging.AMQP;
+namespace District09.Messaging;
 
 internal class ListenerHostedService<TDataType> : BackgroundService
 {

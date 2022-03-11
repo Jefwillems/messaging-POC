@@ -1,6 +1,6 @@
-using District09.Messaging.AMQP.Pipeline;
+using District09.Messaging.Pipeline;
 
-namespace District09.Messaging.AMQP;
+namespace District09.Messaging;
 
 public abstract class BaseMessageHandler<TDataType> : IListenerMiddleware<TDataType>
 {

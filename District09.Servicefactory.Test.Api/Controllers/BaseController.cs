@@ -1,4 +1,4 @@
-using District09.Messaging.AMQP.Contracts;
+using District09.Messaging.Contracts;
 using District09.Servicefactory.Test.Api.Handlers;
 using Microsoft.AspNetCore.Mvc;
 

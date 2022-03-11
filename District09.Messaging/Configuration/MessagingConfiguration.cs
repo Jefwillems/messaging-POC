@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 
-namespace District09.Messaging.AMQP.Configuration;
+namespace District09.Messaging.Configuration;
 
 public class MessagingConfiguration : IFinishedConfig
 {
