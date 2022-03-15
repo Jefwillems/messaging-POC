@@ -1,9 +1,8 @@
-using District09.Messaging;
-using District09.Messaging.Pipeline;
+using District09.Messaging.AMQP;
 
 namespace District09.Servicefactory.Test.Api.Handlers;
 
-public class MySecondHandler : BaseMessageHandler<MySecondData>
+public class MySecondHandler : AmqpMessageHandler<MySecondData>
 {
     private readonly ILogger<MySecondHandler> _logger;
 
@@ -12,9 +11,10 @@ public class MySecondHandler : BaseMessageHandler<MySecondData>
         _logger = logger;
     }
 
-    protected override void HandleMessage(MiddlewareContext<MySecondData> message)
+
+    protected override void HandleAmqpMessage(AmqpContext<MySecondData> context)
     {
         _logger.LogInformation("MySecondhandler called");
-        _logger.LogInformation("Content was: {Content}", message.Original.Text);
+        _logger.LogInformation("Content was: {Content}", context.Original.Text);
     }
 }

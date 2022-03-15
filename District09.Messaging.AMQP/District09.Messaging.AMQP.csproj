@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\District09.Messaging\District09.Messaging.csproj" />
+      <PackageReference Include="Apache.NMS.AMQP" Version="2.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Digipolis.Serilog.Elk.Configuration" Version="3.0.0" />
+      <ProjectReference Include="..\District09.Messaging\District09.Messaging.csproj" />
     </ItemGroup>
 
 </Project>

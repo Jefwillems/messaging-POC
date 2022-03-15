@@ -1,9 +1,8 @@
-using District09.Messaging;
-using District09.Messaging.Pipeline;
+using District09.Messaging.AMQP;
 
 namespace District09.Servicefactory.Test.Api.Handlers;
 
-public class MyMessageHandler : BaseMessageHandler<MyData>
+public class MyMessageHandler : AmqpMessageHandler<MyData>
 {
     private readonly ILogger<MyMessageHandler> _logger;
 
@@ -12,11 +11,12 @@ public class MyMessageHandler : BaseMessageHandler<MyData>
         _logger = logger;
     }
 
-    protected override void HandleMessage(MiddlewareContext<MyData> message)
+
+    protected override void HandleAmqpMessage(AmqpContext<MyData> context)
     {
-        message.Extra.TryGetValue("CorrelationId", out var corrId);
+        context.Extra.TryGetValue("CorrelationId", out var corrId);
         _logger.LogInformation("CorrelationId was: {CorrId}", corrId);
         _logger.LogInformation("doing stuff in my message handler");
-        _logger.LogInformation("message content was: {Content}", message.Original.Text);
+        _logger.LogInformation("message content was: {Content}", context.Original.Text);
     }
 }

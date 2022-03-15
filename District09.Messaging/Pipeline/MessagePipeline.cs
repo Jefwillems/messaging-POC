@@ -1,22 +1,23 @@
 namespace District09.Messaging.Pipeline;
 
-internal class MessagePipeline<TDataType>
+public class MessagePipeline<TDataType, TMessageType>
 {
-    private readonly Queue<IMessageMiddleware<TDataType>> _middlewares;
+    private readonly Queue<IMessageMiddleware<TDataType, TMessageType>> _middlewares;
 
-    public MessagePipeline(IEnumerable<IMessageMiddleware<TDataType>> middlewares)
+    public MessagePipeline(IEnumerable<IMessageMiddleware<TDataType, TMessageType>> middlewares)
     {
-        _middlewares = new Queue<IMessageMiddleware<TDataType>>(middlewares);
+        _middlewares = new Queue<IMessageMiddleware<TDataType, TMessageType>>(middlewares);
     }
 
-    public MiddlewareContext<TDataType> Run(MiddlewareContext<TDataType> context)
+    public BaseMiddlewareContext<TDataType, TMessageType> Run(BaseMiddlewareContext<TDataType, TMessageType> context)
     {
         return _middlewares.Any()
             ? RunInternal(context)
             : context;
     }
 
-    private MiddlewareContext<TDataType> RunInternal(MiddlewareContext<TDataType> context)
+    private BaseMiddlewareContext<TDataType, TMessageType> RunInternal(
+        BaseMiddlewareContext<TDataType, TMessageType> context)
     {
         return _middlewares.TryDequeue(out var m)
             ? m.Execute(context, () => RunInternal(context))

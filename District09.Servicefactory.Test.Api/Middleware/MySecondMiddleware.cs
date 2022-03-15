@@ -1,9 +1,9 @@
-using District09.Messaging.Pipeline;
+using District09.Messaging.AMQP;
 using District09.Servicefactory.Test.Api.Handlers;
 
 namespace District09.Servicefactory.Test.Api.Middleware;
 
-public class MySecondMiddleware : IListenerMiddleware<MySecondData>
+public class MySecondMiddleware : AmqpListenerMiddleware<MySecondData>
 {
     private readonly ILogger<MySecondMiddleware> _logger;
 
@@ -12,7 +12,7 @@ public class MySecondMiddleware : IListenerMiddleware<MySecondData>
         _logger = logger;
     }
 
-    public MiddlewareContext<MySecondData> Execute(MiddlewareContext<MySecondData> context, Action next)
+    protected override AmqpContext<MySecondData> Handle(AmqpContext<MySecondData> context, Action next)
     {
         _logger.LogInformation("second middleware called");
         next();

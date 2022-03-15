@@ -1,6 +1,7 @@
 namespace District09.Messaging.Pipeline;
 
-public interface IMessageMiddleware<TDataType>
+public interface IMessageMiddleware<TDataType, TMessageType>
 {
-    MiddlewareContext<TDataType> Execute(MiddlewareContext<TDataType> context, Action next);
+    BaseMiddlewareContext<TDataType, TMessageType> Execute(BaseMiddlewareContext<TDataType, TMessageType> context,
+        Action next);
 }

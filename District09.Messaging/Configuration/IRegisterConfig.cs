@@ -2,18 +2,18 @@ using District09.Messaging.Pipeline;
 
 namespace District09.Messaging.Configuration;
 
-public interface IRegisterConfig
+public interface IRegisterConfig<TMessageType>
 {
-    IRegisterConfig WithListener<TDataType, THandlerType>(string queue)
-        where THandlerType : BaseMessageHandler<TDataType>;
+    IRegisterConfig<TMessageType> WithListener<TDataType, THandlerType>(string queue)
+        where THandlerType : BaseMessageHandler<TDataType, TMessageType>;
 
-    IRegisterConfig WithPublisher<TDataType>(string queue);
+    IRegisterConfig<TMessageType> WithPublisher<TDataType>(string queue);
 
-    IRegisterConfig WithListenerMiddleware<TMessageMiddleware, TForDataType>()
-        where TMessageMiddleware : IListenerMiddleware<TForDataType>;
+    IRegisterConfig<TMessageType> WithListenerMiddleware<TMessageMiddleware, TForDataType>()
+        where TMessageMiddleware : IListenerMiddleware<TForDataType, TMessageType>;
 
-    IRegisterConfig WithPublisherMiddleware<TMiddleware, TDataType>()
-        where TMiddleware : IPublisherMiddleware<TDataType>;
+    IRegisterConfig<TMessageType> WithPublisherMiddleware<TMiddleware, TDataType>()
+        where TMiddleware : IPublisherMiddleware<TDataType, TMessageType>;
 
     IFinishedConfig Build();
 }

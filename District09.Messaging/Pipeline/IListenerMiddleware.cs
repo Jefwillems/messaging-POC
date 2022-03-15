@@ -1,5 +1,5 @@
 namespace District09.Messaging.Pipeline;
 
-public interface IListenerMiddleware<TDataType> : IMessageMiddleware<TDataType>
+public interface IListenerMiddleware<TDataType, TMessageType> : IMessageMiddleware<TDataType, TMessageType>
 {
 }

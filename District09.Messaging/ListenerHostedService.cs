@@ -4,14 +4,14 @@ using Microsoft.Extensions.Logging;
 
 namespace District09.Messaging;
 
-internal class ListenerHostedService<TDataType> : BackgroundService
+public class ListenerHostedService<TDataType, TMessageType> : BackgroundService
 {
-    private readonly ILogger<ListenerHostedService<TDataType>> _logger;
+    private readonly ILogger<ListenerHostedService<TDataType, TMessageType>> _logger;
     private readonly IListener<TDataType> _listener;
     private readonly string _queueName;
 
     public ListenerHostedService(
-        ILogger<ListenerHostedService<TDataType>> logger,
+        ILogger<ListenerHostedService<TDataType, TMessageType>> logger,
         IListener<TDataType> listener,
         string queueName)
     {
