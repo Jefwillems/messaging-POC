@@ -7,9 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\District09.Messaging\District09.Messaging.csproj" />
-      <ProjectReference Include="..\District09.Messaging.CorrelationId\District09.Messaging.CorrelationId.csproj" />
-      <ProjectReference Include="..\District09.Messaging.Extensions.Apm\District09.Messaging.Extensions.Apm.csproj" />
+        <ProjectReference Include="..\District09.Messaging.AMQP.Apm\District09.Messaging.AMQP.Apm.csproj" />
+        <ProjectReference Include="..\District09.Messaging.AMQP\District09.Messaging.AMQP.csproj" />
     </ItemGroup>
 
     <ItemGroup>

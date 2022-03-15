@@ -1,27 +1,28 @@
 using Apache.NMS;
+using District09.Messaging.AMQP.Contracts;
+using District09.Messaging.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace District09.Messaging.Contracts;
+namespace District09.Messaging.AMQP.Listener;
 
-public abstract class BaseListener<TDataType> : IListener<TDataType>, IDisposable
+public abstract class BaseAmqpListener<TDataType> : IListener<TDataType>, IDisposable
 {
-    protected readonly ILogger<BaseListener<TDataType>> Logger;
-    private readonly IAmqWrapper _wrapper;
+    protected readonly ILogger<BaseAmqpListener<TDataType>> Logger;
+    private readonly IAmqpWrapper _wrapper;
     private readonly IServiceProvider _serviceProvider;
     private ISession? _session;
     private IMessageConsumer? _consumer;
 
-    protected BaseListener(
-        ILogger<BaseListener<TDataType>> logger,
-        IAmqWrapper wrapper,
+    protected BaseAmqpListener(
+        ILogger<BaseAmqpListener<TDataType>> logger,
+        IAmqpWrapper wrapper,
         IServiceProvider serviceProvider)
     {
         Logger = logger;
         _wrapper = wrapper;
         _serviceProvider = serviceProvider;
     }
-
 
     private void MessageReceivedListener(IMessage message)
     {
@@ -36,13 +37,13 @@ public abstract class BaseListener<TDataType> : IListener<TDataType>, IDisposabl
 
     public Task StartListener(string queueName)
     {
+        Logger.LogInformation("starting base amqp listener");
         _session = _wrapper.GetSession();
         var queue = _session.GetQueue(queueName);
         _consumer = _session.CreateConsumer(queue);
         _consumer.Listener += MessageReceivedListener;
         return Task.CompletedTask;
     }
-
 
     public Task StopListener()
     {

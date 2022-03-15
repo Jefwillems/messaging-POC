@@ -1,19 +1,21 @@
 using Apache.NMS;
-using Apache.NMS.AMQP;
+using Apache.NMS.Stomp;
 using District09.Messaging.Configuration;
-using District09.Messaging.Contracts;
+using District09.Messaging.Stomp.Contracts;
 using Microsoft.Extensions.Logging;
 
-namespace District09.Messaging;
+namespace District09.Messaging.Stomp;
 
-public sealed class AmqWrapper : IAmqWrapper, IDisposable
+public class StompWrapper : IStompWrapper
 {
-    private readonly ILogger<AmqWrapper> _logger;
+    private readonly ILogger<StompWrapper> _logger;
     private readonly IFinishedConfig _config;
     private IConnection? _connection;
     private readonly object _connectionLock = new();
 
-    public AmqWrapper(ILogger<AmqWrapper> logger, IFinishedConfig config)
+    public StompWrapper(
+        ILogger<StompWrapper> logger,
+        IFinishedConfig config)
     {
         _logger = logger;
         _config = config;
@@ -22,6 +24,11 @@ public sealed class AmqWrapper : IAmqWrapper, IDisposable
     public bool IsConnectionStarted()
     {
         return _connection is { IsStarted: true };
+    }
+
+    public ISession GetSession()
+    {
+        return GetSession(AcknowledgementMode.IndividualAcknowledge);
     }
 
     private void StartConnection()
@@ -49,7 +56,7 @@ public sealed class AmqWrapper : IAmqWrapper, IDisposable
         return connection;
     }
 
-    public ISession GetSession(AcknowledgementMode mode = AcknowledgementMode.IndividualAcknowledge)
+    public ISession GetSession(AcknowledgementMode mode)
     {
         if (!IsConnectionStarted())
         {
@@ -74,8 +81,7 @@ public sealed class AmqWrapper : IAmqWrapper, IDisposable
     {
         _logger.LogError(exception, "Unexpected error during connection with broker");
     }
-
-
+    
     #region Dispose
 
     private void Dispose(bool disposing)
@@ -91,7 +97,7 @@ public sealed class AmqWrapper : IAmqWrapper, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    ~AmqWrapper()
+    ~StompWrapper()
     {
         Dispose(false);
     }

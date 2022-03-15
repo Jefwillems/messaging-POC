@@ -1,9 +1,9 @@
-using District09.Messaging.Pipeline;
+using District09.Messaging.AMQP;
 using District09.Servicefactory.Test.Api.Handlers;
 
 namespace District09.Servicefactory.Test.Api.Middleware;
 
-public class MyDataMiddleware : IListenerMiddleware<MyData>
+public class MyDataMiddleware : AmqpListenerMiddleware<MyData>
 {
     private readonly ILogger<MyDataMiddleware> _logger;
 
@@ -11,8 +11,8 @@ public class MyDataMiddleware : IListenerMiddleware<MyData>
     {
         _logger = logger;
     }
-
-    public MiddlewareContext<MyData> Execute(MiddlewareContext<MyData> context, Action next)
+    
+    protected override AmqpContext<MyData> Handle(AmqpContext<MyData> context, Action next)
     {
         _logger.LogInformation("mydataMiddleware called");
         context.Extra.Add("data", "Hello World");

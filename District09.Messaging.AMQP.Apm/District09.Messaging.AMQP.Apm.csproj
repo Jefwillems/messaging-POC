@@ -7,11 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\District09.Messaging\District09.Messaging.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Digipolis.Serilog.Elk.Configuration" Version="3.0.0" />
+        <ProjectReference Include="..\District09.Messaging\District09.Messaging.csproj"/>
+        <ProjectReference Include="..\District09.Messaging.AMQP\District09.Messaging.AMQP.csproj"/>
     </ItemGroup>
 
 </Project>

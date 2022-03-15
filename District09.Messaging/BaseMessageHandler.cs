@@ -2,11 +2,15 @@ using District09.Messaging.Pipeline;
 
 namespace District09.Messaging;
 
-public abstract class BaseMessageHandler<TDataType> : IListenerMiddleware<TDataType>
-{
-    protected abstract void HandleMessage(MiddlewareContext<TDataType> context);
+public abstract class BaseMessageHandler<TDataType, TMessageType>
+    : IListenerMiddleware<TDataType, TMessageType>
 
-    public MiddlewareContext<TDataType> Execute(MiddlewareContext<TDataType> context, Action next)
+{
+    protected abstract void HandleMessage(BaseMiddlewareContext<TDataType, TMessageType> context);
+
+    public BaseMiddlewareContext<TDataType, TMessageType> Execute(
+        BaseMiddlewareContext<TDataType, TMessageType> context,
+        Action next)
     {
         try
         {
