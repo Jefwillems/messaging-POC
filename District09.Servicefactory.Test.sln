@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "District09.Messaging.AMQP",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "District09.Messaging.Stomp", "District09.Messaging.Stomp\District09.Messaging.Stomp.csproj", "{669939FD-C3E3-490D-B089-8CC7152F6EB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "District09.Messaging.AMQP.Apm", "District09.Messaging.AMQP.Apm\District09.Messaging.AMQP.Apm.csproj", "{DE597209-CFDA-4595-AAF5-983995102697}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{669939FD-C3E3-490D-B089-8CC7152F6EB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{669939FD-C3E3-490D-B089-8CC7152F6EB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{669939FD-C3E3-490D-B089-8CC7152F6EB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE597209-CFDA-4595-AAF5-983995102697}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE597209-CFDA-4595-AAF5-983995102697}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE597209-CFDA-4595-AAF5-983995102697}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE597209-CFDA-4595-AAF5-983995102697}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

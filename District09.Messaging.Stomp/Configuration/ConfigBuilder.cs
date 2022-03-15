@@ -19,7 +19,7 @@ public class ConfigBuilder : BaseConfigurationBuilder<ITextMessage>
 
     public override IRegisterConfig<ITextMessage> WithListener<TDataType, THandlerType>(string queue)
     {
-        var handlerType = typeof(BaseMessageHandler<TDataType, ITextMessage>);
+        var handlerType = typeof(IListenerMiddleware<TDataType, ITextMessage>);
         Services.AddScoped(handlerType, typeof(THandlerType));
         Services.AddSingleton<IListener<TDataType>, Listener<TDataType>>();
 

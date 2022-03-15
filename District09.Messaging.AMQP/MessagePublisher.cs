@@ -25,7 +25,7 @@ public class MessagePublisher<TDataType> : BaseMessagePublisher<TDataType>
         _logger = logger;
         _wrapper = wrapper;
         _serviceScopeFactory = serviceScopeFactory;
-        _queueName = config.GetPublishQueueForType(typeof(BaseMessagePublisher<TDataType>));
+        _queueName = config.GetPublishQueueForType(typeof(IMessagePublisher<TDataType>));
     }
 
     public override void PublishMessage(TDataType message)

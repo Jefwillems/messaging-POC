@@ -34,7 +34,7 @@ public abstract class BaseConfigurationBuilder<TMessageType> :
     public IFinishedConfig Build()
     {
         var config = new MessagingConfiguration(Listeners, Publishers, Options);
-        Services.AddSingleton(config);
+        Services.AddSingleton<IFinishedConfig>(config);
         return config;
     }
 }

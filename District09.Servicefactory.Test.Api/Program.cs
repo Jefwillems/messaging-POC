@@ -1,6 +1,7 @@
 using CorrelationId;
 using CorrelationId.DependencyInjection;
 using Digipolis.Serilog.Elk.Configuration;
+using District09.Messaging.AMQP.Apm.Extensions;
 using District09.Messaging.AMQP.Extensions;
 using District09.Servicefactory.Test.Api.Handlers;
 using District09.Servicefactory.Test.Api.Middleware;
@@ -16,6 +17,7 @@ builder.Services.AddAmqpMessaging(builder.Configuration,
     opts =>
     {
         opts
+            .WithApmTracing<MyData>()
             .WithListenerMiddleware<MyDataMiddleware,
                 MyData>() // For MyData processing -> first execute our middleware (for putting data in context or something)
             .WithListener<MyData,

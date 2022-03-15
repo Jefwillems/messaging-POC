@@ -37,6 +37,7 @@ public abstract class BaseAmqpListener<TDataType> : IListener<TDataType>, IDispo
 
     public Task StartListener(string queueName)
     {
+        Logger.LogInformation("starting base amqp listener");
         _session = _wrapper.GetSession();
         var queue = _session.GetQueue(queueName);
         _consumer = _session.CreateConsumer(queue);
